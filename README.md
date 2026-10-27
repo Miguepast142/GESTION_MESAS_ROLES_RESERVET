@@ -1,33 +1,26 @@
----
-
 ### PARTE 1: Resumen de Errores y Hallazgos Encontrados (En Español)
 
 El análisis del código base reveló los siguientes puntos críticos que debían corregirse y estructurarse:
 
 1. **Validación de Capacidad de Mesas (`app.js`):**
-* *Síntoma/Problema:* La condición de validación en el formulario verificaba `capacity >= 20`, lo que rechazaba incorrectamente mesas con capacidad de 20 personas. El requisito exigía valores de 1 a 20 *inclusivo*.
-* *Corrección:* Se ajustó la validación a `capacity > 20` (o `capacity < 1 || capacity > 20`) para permitir el límite superior correcto de 20 personas.
-
+   - **Síntoma/Problema:** La condición de validación en el formulario verificaba `capacity >= 20`, lo que rechazaba incorrectamente mesas con capacidad de 20 personas. El requisito exigía valores de 1 a 20 *inclusivo*.
+   - **Corrección:** Se ajustó la validación a `capacity > 20` (o `capacity < 1 || capacity > 20`) para permitir el límite superior correcto de 20 personas.
 
 2. **Inconsistencia de Claves en `localStorage` (`i18n.js`):**
-* *Síntoma/Problema:* El sistema leía el idioma guardado usando la clave `'reservet.lang'`, pero lo guardaba usando `'reservet.language'`. Esto rompía la persistencia del idioma seleccionado al recargar la página.
-* *Corrección:* Se unificó el uso de la clave a `'reservet.language'` en ambos procesos para garantizar que el idioma elegido se conserve correctamente al recargar.
-
+   - **Síntoma/Problema:** El sistema leía el idioma guardado usando la clave `'reservet.lang'`, pero lo guardaba usando `'reservet.language'`. Esto rompía la persistencia del idioma seleccionado al recargar la página.
+   - **Corrección:** Se unificó el uso de la clave a `'reservet.language'` en ambos procesos para garantizar que el idioma elegido se conserve correctamente al recargar.
 
 3. **Módulo de Mesas Incompleto en el Backend:**
-* *Síntoma/Problema:* La carpeta `src/modules/tables/` solo contenía un archivo README. Faltaba por completo la separación en capas requerida (Rutas, Servicio, Repositorio).
-* *Corrección:* Se implementó la arquitectura modular con SQL parametrizado, validando nombres de hasta 80 caracteres, capacidad de 1 a 20, y estados permitidos (`available`, `occupied`, `out_of_service`).
-
+   - **Síntoma/Problema:** La carpeta `src/modules/tables/` solo contenía un archivo README. Faltaba por completo la separación en capas requerida (Rutas, Servicio, Repositorio).
+   - **Corrección:** Se implementó la arquitectura modular con SQL parametrizado, validando nombres de hasta 80 caracteres, capacidad de 1 a 20, y estados permitidos (`available`, `occupied`, `out_of_service`).
 
 4. **Ausencia total del Módulo de Autenticación:**
-* *Síntoma/Problema:* El login no existía y los endpoints de mesas estaban completamente desprotegidos.
-* *Corrección:* Se implementó el registro/migración de usuarios, el hashing seguro de contraseñas (con bcrypt/argon2), los endpoints de sesión (`/api/auth/login`, `/api/auth/logout`, `/api/auth/session`) y la protección estricta en el servidor para que cualquier consulta de mesas sin sesión responda con `401 Unauthorized`.
-
+   - **Síntoma/Problema:** El login no existía y los endpoints de mesas estaban completamente desprotegidos.
+   - **Corrección:** Se implementó el registro/migración de usuarios, el hashing seguro de contraseñas (con bcrypt/argon2), los endpoints de sesión (`/api/auth/login`, `/api/auth/logout`, `/api/auth/session`) y la protección estricta en el servidor para que cualquier consulta de mesas sin sesión responda con `401 Unauthorized`.
 
 5. **Configuración de la Base de Datos de Pruebas:**
-* *Síntoma/Problema:* El archivo `src/config.ts` no contemplaba la variable `TEST_DATABASE_URL` requerida para las pruebas de integración aisladas.
-* *Corrección:* Se añadió la validación y soporte para `TEST_DATABASE_URL` apuntando a `reservet_candidate_test`.
-
+   - **Síntoma/Problema:** El archivo `src/config.ts` no contemplaba la variable `TEST_DATABASE_URL` requerida para las pruebas de integración aisladas.
+   - **Corrección:** Se añadió la validación y soporte para `TEST_DATABASE_URL` apuntando a `reservet_candidate_test`.
 
 ---
 
